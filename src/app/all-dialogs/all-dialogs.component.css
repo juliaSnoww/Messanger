@@ -1,0 +1,18 @@
+img{
+  width: 10vw;
+  max-width: 100px;
+  min-width: 50px ;
+}
+.container{
+  margin: 10px 0;
+  background-color: darkgray;
+  display: flex;
+  max-height: 100px;
+  min-height:50px ;
+  height: 10vw;
+}
+.text-part{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

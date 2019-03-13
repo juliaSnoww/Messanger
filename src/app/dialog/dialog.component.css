@@ -1,0 +1,56 @@
+header {
+  position: sticky;
+  top: 0;
+  background-color: cornsilk;
+  height: 40px;
+  font-size: 20px;
+}
+
+header button {
+  float: left;
+}
+
+header p {
+  text-align: center;
+  margin: 0; /*change*/
+}
+
+.mess-container {
+  display: grid;
+  flex-direction: column;
+  min-height: -webkit-fill-available;
+  height: auto;
+}
+
+input {
+  position: sticky;
+  bottom: 0;
+  box-sizing: border-box;
+  width: inherit;
+}
+
+.messFrom1, .messFrom0 {
+  margin: 2px 10px;
+  padding: 10px;
+  border-radius: 30px;
+  max-width: 80%;
+  width: fit-content;
+  height: fit-content;
+}
+
+.messFrom1 {
+  text-align: left;
+  background-color: wheat;
+}
+
+.messFrom0 {
+  text-align: right;
+  background-color: wheat;
+  justify-self: end;
+}
+
+.mess:hover {
+  filter: invert(100%);
+}
+
+

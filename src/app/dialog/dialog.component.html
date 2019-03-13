@@ -1,0 +1,20 @@
+<h1 *ngIf="!id; else selectedDialog">Choose dialog</h1>
+
+<ng-template #selectedDialog>
+  <header>
+    <button class="btn" *ngIf="showButton" (click)="showAllDialogs()">back</button>
+    <p>{{ nickName }}</p>
+  </header>
+
+  <div class="mess-container">
+    <a (click)="onAddMess()"> Add more messages</a>
+    <p *ngFor="let mess of messages" class="messFrom{{mess.type}} mess">
+      {{ mess.mess }}
+    </p>
+  </div>
+  <input type="text">
+</ng-template>
+
+
+
+

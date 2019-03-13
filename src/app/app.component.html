@@ -1,0 +1,13 @@
+<app-header></app-header>
+<div (window:resize)="onResize($event)">
+
+  <div class="dialog-container" *ngIf="largeWindow">
+    <app-all-dialogs class="test" ></app-all-dialogs>
+    <app-dialog></app-dialog>
+  </div>
+
+  <div class="dialog-container" *ngIf="!largeWindow">
+    <app-all-dialogs class="test" *ngIf="showAllDialogs"></app-all-dialogs>
+    <app-dialog *ngIf="!showAllDialogs"></app-dialog>
+  </div>
+</div>

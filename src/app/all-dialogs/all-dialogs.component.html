@@ -1,0 +1,7 @@
+<div *ngFor="let dialog of listDialog" class="container" (click)="onSelectDialog(dialog.id)">
+  <img [src]="dialog.img">
+  <div class="text-part">
+    <span style="background-color: brown">{{ dialog.name }}</span>
+    <span style="background-color: blueviolet">{{ dialog.lastMessage}}</span>
+  </div>
+</div>
