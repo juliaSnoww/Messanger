@@ -1,7 +1,9 @@
-<div *ngFor="let dialog of listDialog" class="container" (click)="onSelectDialog(dialog.id)">
-  <img [src]="dialog.img">
-  <div class="text-part">
-    <span style="background-color: brown">{{ dialog.name }}</span>
-    <span style="background-color: blueviolet">{{ dialog.lastMessage}}</span>
+<div *ngIf="listDialog">
+  <div *ngFor="let dialog of listDialog | keyvalue" class="container" (click)="onSelectDialog(dialog.id)">
+    <img [src]="dialog.value.picture">
+    <div class="text-part">
+      <span style="background-color: brown">{{ dialog.value.nick }}</span>
+      <span style="background-color: blueviolet">{{ dialog.value.messages[0].msg[0].content}}</span>
+    </div>
   </div>
 </div>

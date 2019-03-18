@@ -6,10 +6,10 @@
     <p>{{ nickName }}</p>
   </header>
 
-  <div class="mess-container">
+  <div class="msg-container">
     <a (click)="onAddMess()"> Add more messages</a>
-    <p *ngFor="let mess of messages" class="messFrom{{mess.type}} mess">
-      {{ mess.mess }}
+    <p *ngFor="let msg of messages" class="msgFrom{{msg.type}} msg">
+      {{ msg.msg }}
     </p>
   </div>
   <input type="text">

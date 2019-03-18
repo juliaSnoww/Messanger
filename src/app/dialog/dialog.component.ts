@@ -1,7 +1,8 @@
-import {AfterContentInit, Component, DoCheck, OnChanges, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
-import {ResizeWindowService} from '../resize-window.service';
-import {MessangesService} from '../messanges.service';
+import {ResizeWindowService} from '../shared/resize-window.service';
+import {MessagesService} from '../shared/messanges.service';
+import {Message} from '@angular/compiler/src/i18n/i18n_ast';
 
 @Component({
   selector: 'app-dialog',
@@ -10,11 +11,11 @@ import {MessangesService} from '../messanges.service';
 })
 export class DialogComponent implements OnInit {
   constructor(private resizeService: ResizeWindowService,
-              private messagesService: MessangesService) {
+              private messagesService: MessagesService) {
   }
 
   id: number;
-  messages: Array;
+  messages: Array<Message>;
   nickName = 'Vasia';
   showButton = !this.resizeService.onResizeWindow();
 
@@ -27,16 +28,15 @@ export class DialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.messagesService)
     this.messagesService.dialogId.subscribe(
       (id) => {
-        console.log(id)
         this.id = id;
-        this.messages = this.messagesService.getMessages(this.id);
+        if (this.id) {
+          this.messages = this.messagesService.getMessages(this.id);
+        }
       }
     );
-   }
-
+  }
 
 
 }

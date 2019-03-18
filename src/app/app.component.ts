@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 
-import {ResizeWindowService} from './resize-window.service';
+import {ResizeWindowService} from './shared/resize-window.service';
 
 @Component({
   selector: 'app-root',
@@ -28,7 +28,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    const app = document.querySelector('app-dialog');
-    //app.scrollBy(0, window.innerHeight);
+      const app = document.querySelector('app-dialog');
+     // app.scrollBy(0, window.innerHeight);
   }
 }
