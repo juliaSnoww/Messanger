@@ -12,7 +12,7 @@
       {{ msg.msg }}
     </p>
   </div>
-  <input type="text">
+  <input type="text" (keyup.enter)="onPostMessage()" #textMessage>
 </ng-template>
 
 

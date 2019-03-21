@@ -1,4 +1,4 @@
 export class ListDialogsModel {
-  constructor(public nick: string, public picture: string, public messages: any) {
+  constructor(public nick: string, public picture: string, public messages: any, public uid: number) {
   }
 }

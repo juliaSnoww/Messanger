@@ -9,7 +9,12 @@ export class ListDialogsService {
   constructor() {
   }
 
-  newDialogs: ListDialogsModel = {};
+  newDialogs: {} = {};
   dialog = new BehaviorSubject(this.newDialogs);
   dialogData = this.dialog.asObservable();
+
+  clearDialog() {
+    this.newDialogs = {};
+    this.dialog.next(this.newDialogs);
+  }
 }

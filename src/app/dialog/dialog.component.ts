@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 
 import {ResizeWindowService} from '../shared/resize-window.service';
 import {MessagesService} from '../shared/messanges.service';
 import {Message} from '@angular/compiler/src/i18n/i18n_ast';
+import {ServerMailruService} from '../shared/server-mailru.service';
 
 @Component({
   selector: 'app-dialog',
@@ -11,12 +12,15 @@ import {Message} from '@angular/compiler/src/i18n/i18n_ast';
 })
 export class DialogComponent implements OnInit {
   constructor(private resizeService: ResizeWindowService,
-              private messagesService: MessagesService) {
+              private messagesService: MessagesService,
+              private  change: ChangeDetectorRef,
+              private  mailruService: ServerMailruService) {
   }
 
+  @ViewChild('textMessage') textMessage: ElementRef;
   id: number;
   messages: Array<Message>;
-  nickName = 'Vasia';
+  nickName;
   showButton = !this.resizeService.onResizeWindow();
 
   showAllDialogs() {
@@ -24,16 +28,25 @@ export class DialogComponent implements OnInit {
   }
 
   onAddMess() {
-    this.messages = this.messagesService.addMessages(this.id);
+    this.messages = this.messagesService.addMessages();
+  }
+
+  onPostMessage() {
+    const msg = this.textMessage.nativeElement.value;
+    this.mailruService.postMsg(this.id, msg);
+    this.id = 0;
   }
 
   ngOnInit() {
-    this.messagesService.dialogId.subscribe(
-      (id) => {
-        this.id = id;
-        if (this.id) {
+    this.messagesService.personIdAndName.subscribe(
+      (params) => {
+        if (params) {
+          console.log(params);
+          this.id = params.id;
           this.messages = this.messagesService.getMessages(this.id);
+          this.nickName = params.nick;
         }
+        this.change.detectChanges();
       }
     );
   }

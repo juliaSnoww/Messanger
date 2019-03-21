@@ -1,40 +1,38 @@
-import {Component, DoCheck, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectorRef, DoCheck} from '@angular/core';
 
-import {Dialogs} from '../model/list-dialogs.model';
 import {ListDialogsService} from '../shared/list-dialogs.service';
 import {MessagesService} from '../shared/messanges.service';
 import {ResizeWindowService} from '../shared/resize-window.service';
-import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'app-all-dialogs',
   templateUrl: './all-dialogs.component.html',
   styleUrls: ['./all-dialogs.component.css']
 })
-export class AllDialogsComponent implements OnInit, DoCheck {
+export class AllDialogsComponent implements OnInit {
+
 
   constructor(private dialogService: ListDialogsService,
               private msgService: MessagesService,
-              private  resizeService: ResizeWindowService) {
+              private  resizeService: ResizeWindowService,
+              private  change: ChangeDetectorRef) {
   }
 
   listDialog;
 
-  onSelectDialog(id) {
-    this.msgService.dialogId.next(id);
+  onSelectDialog(id, nick) {
+    const person = {id, nick};
+    this.msgService.personIdAndName.next(person);
     this.resizeService.showDialog.emit(false);
   }
 
   ngOnInit() {
     this.dialogService.dialogData.subscribe(
       (res) => {
-        console.log(this.listDialog);
         this.listDialog = res;
+        this.change.detectChanges();
       }
     );
   }
 
-  ngDoCheck() {
-
-  }
 }

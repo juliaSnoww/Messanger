@@ -2,3 +2,12 @@ img {
   height: inherit;
   margin-left: 10px;
 }
+.refresh{
+  float: right;
+  background-color: cornflowerblue;
+  height: 100%;
+  width: max-content;
+  padding: 5px;
+  box-sizing: border-box;
+  border-radius: 10%;
+}

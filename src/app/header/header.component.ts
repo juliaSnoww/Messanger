@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 
 import '../../assets/loader.js';
 import {ServerMailruService} from '../shared/server-mailru.service';
@@ -11,48 +11,47 @@ declare let mailru: any;
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
 
   constructor(private serverMailru: ServerMailruService,
-              private dialogService: ListDialogsService,) {
+              private dialogService: ListDialogsService) {
   }
 
-  ngOnInit() {
+  clearComponent() {
+    this.dialogService.clearDialog();
+    this.getMessagesMailru();
   }
 
   getMessagesMailru() {
     mailru.loader.require('api', () => {
-        mailru.connect.init(this.serverMailru.appId, this.serverMailru.privateKey);
+      mailru.connect.init(this.serverMailru.appId, this.serverMailru.privateKey);
 
-        mailru.events.listen(mailru.connect.events.login, (session) => {
-          window.location.reload();
-        });
+      mailru.events.listen(mailru.connect.events.login, (session) => {
+        window.location.reload();
+      });
 
-        mailru.events.listen(mailru.connect.events.logout, () => {
-          window.location.reload();
-        });
+      mailru.events.listen(mailru.connect.events.logout, () => {
+        window.location.reload();
+      });
 
-        mailru.connect.getLoginStatus((result) => {
-          if (result.is_app_user != 1) {
-            console.log('not sign in');
-            // не менять на !==
+      mailru.connect.getLoginStatus((result) => {
+        if (result.is_app_user != 1) {
+          console.log('not sign in');
+          // не менять на !==
 
-            // let body = document.querySelector('body');
-            // let a = document.createElement('a');
-            // a.classList = 'mrc__connectButton';
-            // a.innerText = 'вход@mail.ru';
-            // body.appendChild(a);
-            // mailru.connect.initButton();
+          // let body = document.querySelector('body');
+          // let a = document.createElement('a');
+          // a.classList = 'mrc__connectButton';
+          // a.innerText = 'вход@mail.ru';
+          // body.appendChild(a);
+          // mailru.connect.initButton();
 
-          } else {
-            this.serverMailru.start().subscribe(
-              (res) => {
-                this.dialogService.dialog.next(this.dialogService.newDialogs);
-              }
-            );
-          }
-        });
-      }
-    );
+        } else {
+          this.serverMailru.start().subscribe(
+            () => this.dialogService.dialog.next({...this.dialogService.newDialogs})
+          );
+        }
+      });
+    });
   }
 }

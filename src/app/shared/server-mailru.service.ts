@@ -1,14 +1,15 @@
 import {Injectable} from '@angular/core';
+import {Http} from '@angular/http';
 import {Observable} from 'rxjs';
 import 'rxjs/Rx';
 
 import '../../assets/loader.js';
 import * as md5 from '../../../node_modules/js-md5/src/md5.js';
-import {Http} from '@angular/http';
-import {MessagesService} from './messanges.service';
+
+import {Messages} from '../model/messanges.model';
 import {ListDialogsModel} from '../model/list-dialogs.model';
 import {ListDialogsService} from './list-dialogs.service';
-import {Messages} from '../model/messanges.model';
+import {MessagesService} from './messanges.service';
 
 declare let mailru: any;
 
@@ -63,14 +64,14 @@ export class ServerMailruService {
         uidSender + '&sig=' + signature + '&limit=50').map(
         response => {
           const messages = response.json();
-          this.messagesService.messages[dialog.ID] = [];
+          this.messagesService.messages[uidSender] = [];
 
           for (const msg of messages) {
-            this.messagesService.messages[dialog.ID].push(new Messages(msg.type, msg.message));
+            this.messagesService.messages[uidSender].push(new Messages(msg.type, msg.message[0].content));
           }
 
-          this.dialogService.newDialogs[dialog.ID] = new ListDialogsModel
-          (dialog.user.nick, dialog.user.pic, this.messagesService.messages[dialog.ID]);
+          this.dialogService.newDialogs[uidSender] = new ListDialogsModel
+          (dialog.user.nick, dialog.user.pic, this.messagesService.messages[uidSender], uidSender);
 
           this.createMessagesArray(dialogList, observer);
           observer.next(response.json());
@@ -79,4 +80,15 @@ export class ServerMailruService {
     }
   }
 
+  postMsg(uidSender, message) {
+    const method = 'messages.post';
+    const params = 'app_id=' + this.appId + 'message=' + message + 'method=' + method +
+      'session_key=' + this.sessionKey + 'uid=' + uidSender;
+    const signature = md5(this.uid + params + this.privateKey);
+
+    fetch(this.url + method + '&app_id=' + this.appId + '&session_key=' + this.sessionKey + '&uid=' +
+      uidSender + '&sig=' + signature + '&message=' + message)
+      .then((response) => {
+      });
+  }
 }

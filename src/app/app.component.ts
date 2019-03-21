@@ -16,7 +16,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   showAllDialogs: boolean = true;
 
   onResize() {
-    this.largeWindow =  this.resizeService.onResizeWindow();
+    this.largeWindow = this.resizeService.onResizeWindow();
   }
 
   ngOnInit() {
@@ -28,7 +28,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-      const app = document.querySelector('app-dialog');
-     // app.scrollBy(0, window.innerHeight);
+    const app = document.querySelector('app-dialog');
+    // app.scrollBy(0, window.innerHeight);
   }
 }

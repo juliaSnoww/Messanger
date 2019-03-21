@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Messages} from '../model/messanges.model';
+
 import {BehaviorSubject} from 'rxjs';
 
 
@@ -12,20 +12,30 @@ export class MessagesService {
   constructor() {
   }
 
-  messages = {
-  };
-  dialogId = new BehaviorSubject(null);
+  messages = {};
+  msg;
+  length: number;
+  personIdAndName = new BehaviorSubject(null);
 
   getMessages(id) {
-    console.log('get msg');
+    this.msg = this.messages[id].slice().reverse();
     this.amount = 0;
-    return this.messages[id].slice(-10);
+    this.length = this.msg.length;
+    return (this.length - 20 > 0) ? this.msg.slice(this.length - 20, this.length) : this.msg;
   }
 
-  addMessages(id) {
-    console.log('add msg');
+
+  addMessages() {
     this.amount += 10;
-    return this.messages[id].slice(-10 - this.amount);
+    if (this.length - 20 - this.amount > 0) {
+      return this.msg.slice(this.length - 20 - this.amount, this.length);
+    } else {
+      return this.msg;
+    }
+  }
+
+  clearMessages() {
+    this.messages = [];
   }
 
 }
