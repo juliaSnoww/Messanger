@@ -16,11 +16,11 @@ export class AppComponent implements OnInit, AfterViewInit {
   showAllDialogs: boolean = true;
 
   onResize() {
-    this.largeWindow = this.resizeService.onResizeWindow();
+    this.largeWindow = this.resizeService.isSmall();
   }
 
   ngOnInit() {
-    this.largeWindow = this.resizeService.onResizeWindow();
+    this.largeWindow = this.resizeService.isSmall();
     this.resizeService.showDialog.subscribe(
       (params) => {
         this.showAllDialogs = params;

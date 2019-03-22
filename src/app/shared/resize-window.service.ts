@@ -9,7 +9,7 @@ export class ResizeWindowService {
 
   showDialog = new EventEmitter();
 
-  onResizeWindow() {
+  isSmall() {
     return (window.innerWidth > 860);
   }
 

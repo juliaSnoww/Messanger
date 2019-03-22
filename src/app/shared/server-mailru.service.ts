@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
-import {Observable} from 'rxjs';
+import {Observable, forkJoin} from 'rxjs';
 import 'rxjs/Rx';
 
 import '../../assets/loader.js';
@@ -20,7 +20,7 @@ export class ServerMailruService {
 
   constructor(private http: Http,
               private messagesService: MessagesService,
-              private  dialogService: ListDialogsService) {
+              private dialogService: ListDialogsService) {
   }
 
   url = 'http://www.appsmail.ru/platform/api?method=';
@@ -28,6 +28,40 @@ export class ServerMailruService {
   privateKey = '0625d80a4886ba6d8fea34c8152e0a72';
   sessionKey;
   uid;
+  requare: any;
+
+  loadClient() {
+    mailru.loader.require('api', () => {
+      mailru.connect.init(this.appId, this.privateKey);
+
+      mailru.events.listen(mailru.connect.events.login, (session) => {
+        window.location.reload();
+      });
+
+      mailru.events.listen(mailru.connect.events.logout, () => {
+        window.location.reload();
+      });
+
+      mailru.connect.getLoginStatus((result) => {
+        if (result.is_app_user != 1) {
+          console.log('not sign in');
+          // не менять на !==
+
+          // let body = document.querySelector('body');
+          // let a = document.createElement('a');
+          // a.classList = 'mrc__connectButton';
+          // a.innerText = 'вход@mail.ru';
+          // body.appendChild(a);
+          // mailru.connect.initButton();
+
+        } else {
+          this.start().subscribe(
+            () => this.dialogService.upDateDialog()
+          );
+        }
+      });
+    });
+  }
 
   start(): Observable<any> {
     return new Observable(observer => {
@@ -53,6 +87,7 @@ export class ServerMailruService {
   }
 
   createMessagesArray(dialogList, observer) {
+
     if (dialogList.length) {
       const dialog = dialogList.shift();
       const uidSender = dialog.user.uid;
@@ -69,16 +104,19 @@ export class ServerMailruService {
           for (const msg of messages) {
             this.messagesService.messages[uidSender].push(new Messages(msg.type, msg.message[0].content));
           }
-
-          this.dialogService.newDialogs[uidSender] = new ListDialogsModel
+          const dialogModel = new ListDialogsModel
           (dialog.user.nick, dialog.user.pic, this.messagesService.messages[uidSender], uidSender);
+
+          this.dialogService.addDialog(uidSender, dialogModel);
 
           this.createMessagesArray(dialogList, observer);
           observer.next(response.json());
         }
       ).subscribe();
     }
+
   }
+
 
   postMsg(uidSender, message) {
     const method = 'messages.post';

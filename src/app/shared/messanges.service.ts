@@ -15,7 +15,8 @@ export class MessagesService {
   messages = {};
   msg;
   length: number;
-  personIdAndName = new BehaviorSubject(null);
+  private personIdAndName = new BehaviorSubject(null);
+  personData = this.personIdAndName.asObservable();
 
   getMessages(id) {
     this.msg = this.messages[id].slice().reverse();
@@ -23,7 +24,6 @@ export class MessagesService {
     this.length = this.msg.length;
     return (this.length - 20 > 0) ? this.msg.slice(this.length - 20, this.length) : this.msg;
   }
-
 
   addMessages() {
     this.amount += 10;
@@ -34,8 +34,8 @@ export class MessagesService {
     }
   }
 
-  clearMessages() {
-    this.messages = [];
+  setPersonData(data){
+    this.personIdAndName.next(data);
   }
 
 }

@@ -22,7 +22,7 @@ export class AllDialogsComponent implements OnInit {
 
   onSelectDialog(id, nick) {
     const person = {id, nick};
-    this.msgService.personIdAndName.next(person);
+    this.msgService.setPersonData(person);
     this.resizeService.showDialog.emit(false);
   }
 
@@ -34,5 +34,6 @@ export class AllDialogsComponent implements OnInit {
       }
     );
   }
+
 
 }
