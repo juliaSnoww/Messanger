@@ -89,7 +89,6 @@ export class ServerMailruService {
   createMessagesArray(dialogList, observer) {
 
     if (dialogList.length) {
-      //const dialog = dialogList.shift();
       this.requare = [];
       for (let i = 0; i < dialogList.length; i++) {
         const dialog = dialogList[i];
@@ -108,7 +107,6 @@ export class ServerMailruService {
             const messages = JSON.parse(res[i]._body);
             const dialog = dialogList[i];
             const uidSender = dialog.user.uid;
-            //const messages = response.json();
             this.messagesService.messages[uidSender] = [];
 
             for (const msg of messages) {
@@ -118,38 +116,11 @@ export class ServerMailruService {
             (dialog.user.nick, dialog.user.pic, this.messagesService.messages[uidSender], uidSender);
 
             this.dialogService.addDialog(uidSender, dialogModel);
-
-            //this.createMessagesArray(dialogList, observer);
           }
 
           observer.next(null);
         }
-      )
-
-      // const uidSender = dialog.user.uid;
-      // const method = 'messages.getThread';
-      // const params = 'app_id=' + this.appId + 'limit=50method=' + method + 'session_key=' + this.sessionKey + 'uid=' + uidSender;
-      // const signature = md5(this.uid + params + this.privateKey);
-      //
-      // this.requare.push(this.http.get(this.url + method + '&app_id=' + this.appId + '&session_key=' + this.sessionKey + '&uid=' +
-      //   uidSender + '&sig=' + signature + '&limit=50'));
-      //   .map(
-      //     response => {
-      //       const messages = response.json();
-      //       this.messagesService.messages[uidSender] = [];
-      //
-      //       for (const msg of messages) {
-      //         this.messagesService.messages[uidSender].push(new Messages(msg.type, msg.message[0].content));
-      //       }
-      //       const dialogModel = new ListDialogsModel
-      //       (dialog.user.nick, dialog.user.pic, this.messagesService.messages[uidSender], uidSender);
-      //
-      //       this.dialogService.addDialog(uidSender, dialogModel);
-      //
-      //       this.createMessagesArray(dialogList, observer);
-      //       observer.next(response.json());
-      //     }
-      //   ).subscribe();
+      );
     }
 
   }
@@ -161,9 +132,8 @@ export class ServerMailruService {
       'session_key=' + this.sessionKey + 'uid=' + uidSender;
     const signature = md5(this.uid + params + this.privateKey);
 
-    fetch(this.url + method + '&app_id=' + this.appId + '&session_key=' + this.sessionKey + '&uid=' +
-      uidSender + '&sig=' + signature + '&message=' + message)
-      .then((response) => {
-      });
+    this.http.get(this.url + method + '&app_id=' + this.appId + '&session_key=' + this.sessionKey + '&uid=' +
+      uidSender + '&sig=' + signature + '&message=' + message).subscribe();
+
   }
 }

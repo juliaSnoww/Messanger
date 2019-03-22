@@ -12,9 +12,8 @@
       {{ msg.msg }}
     </p>
   </div>
-  <input type="text" (keyup.enter)="onPostMessage()" #textMessage>
+  <input type="text" [(ngModel)]="textMessage" (keyup.enter)="onPostMessage(textMessage)" >
 </ng-template>
-
 
 
 

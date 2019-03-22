@@ -7,6 +7,7 @@ import {HeaderComponent} from './header/header.component';
 import {AllDialogsComponent} from './all-dialogs/all-dialogs.component';
 import {DialogComponent} from './dialog/dialog.component';
 import {HttpModule} from '@angular/http';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import {HttpModule} from '@angular/http';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpModule
+    HttpModule,
+    FormsModule
   ],
   providers: [
   ],

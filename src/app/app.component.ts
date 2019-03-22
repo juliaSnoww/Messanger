@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
 
 import {ResizeWindowService} from './shared/resize-window.service';
 
@@ -7,28 +7,25 @@ import {ResizeWindowService} from './shared/resize-window.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit {
 
-  constructor(private resizeService: ResizeWindowService) {
+  constructor(private resizeService: ResizeWindowService,
+              private change: ChangeDetectorRef) {
   }
 
   largeWindow: boolean;
   showAllDialogs: boolean = true;
 
   onResize() {
-    this.largeWindow = this.resizeService.isSmall();
+    this.largeWindow = this.resizeService.isBig();
   }
 
   ngOnInit() {
-    this.largeWindow = this.resizeService.isSmall();
-    this.resizeService.showDialog.subscribe(
+    this.largeWindow = this.resizeService.isBig();
+    this.resizeService.showAllDialogs.subscribe(
       (params) => {
         this.showAllDialogs = params;
+        this.change.detectChanges();
       });
-  }
-
-  ngAfterViewInit() {
-    const app = document.querySelector('app-dialog');
-    // app.scrollBy(0, window.innerHeight);
   }
 }

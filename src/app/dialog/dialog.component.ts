@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterContentChecked, Component, OnDestroy, OnInit} from '@angular/core';
 
 import {ResizeWindowService} from '../shared/resize-window.service';
 import {MessagesService} from '../shared/messanges.service';
@@ -11,38 +11,39 @@ import {ListDialogsService} from '../shared/list-dialogs.service';
   templateUrl: './dialog.component.html',
   styleUrls: ['./dialog.component.css']
 })
-export class DialogComponent implements OnInit {
+export class DialogComponent implements OnInit, AfterContentChecked, OnDestroy {
+
   constructor(private resizeService: ResizeWindowService,
               private messagesService: MessagesService,
-              private change: ChangeDetectorRef,
               private mailruService: ServerMailruService,
               private dialogService: ListDialogsService) {
   }
 
-  @ViewChild('textMessage') textMessage: ElementRef;
+  textMessage;
   id: number;
   messages: Array<Message>;
   nickName;
-  showButton = !this.resizeService.isSmall();
+  personData;
+  showButton: boolean;
 
   showAllDialogs() {
-    this.resizeService.showDialog.emit(true);
+    this.resizeService.showAllDialogs.emit(true);
   }
 
   onAddMess() {
     this.messages = this.messagesService.addMessages();
   }
 
-  onPostMessage() {
-    const msg = this.textMessage.nativeElement.value;
+  onPostMessage(msg) {
     this.mailruService.postMsg(this.id, msg);
     this.id = 0;
     this.dialogService.clearDialog();
+    this.resizeService.showAllDialogs.emit(true);
     this.mailruService.loadClient();
   }
 
   ngOnInit() {
-    this.messagesService.personData.subscribe(
+    this.personData = this.messagesService.personData.subscribe(
       (params) => {
         if (params) {
           console.log(params);
@@ -50,10 +51,15 @@ export class DialogComponent implements OnInit {
           this.messages = this.messagesService.getMessages(this.id);
           this.nickName = params.nick;
         }
-        this.change.detectChanges();
       }
     );
   }
 
+  ngAfterContentChecked() {
+    this.showButton = !this.resizeService.isBig();
+  }
 
+  ngOnDestroy() {
+    this.personData.unsubscribe();
+  }
 }
